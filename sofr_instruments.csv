@@ -1,0 +1,27 @@
+label,type,effective,termination,spec,metric,rate,ref1,ref2,ref3,node_tenor
+# --- SHORT END: meeting-to-meeting OIS (6 instruments, one node per FOMC period) ---
+# NOTE (long-term): replace these ois_m2m rows with serial (1m) and quarterly (3m)
+# SOFR futures once you are ready to handle the convexity adjustment. Serial futures
+# (spec="usd_stir1") cover each monthly period; quarterly futures (spec="usd_stir")
+# cover Mar/Jun/Sep/Dec IMM dates. Each future needs a convexity adjustment (~0.5bp
+# per year of duration squared) subtracted from the futures rate before passing as `s`.
+ois_fomc1,ois_m2m,spot,2025-03-19,usd_irs,,4.33,,,,
+ois_fomc2,ois_m2m,2025-03-19,2025-05-07,usd_irs,,4.20,,,,
+ois_fomc3,ois_m2m,2025-05-07,2025-06-18,usd_irs,,4.10,,,,
+ois_fomc4,ois_m2m,2025-06-18,2025-07-30,usd_irs,,4.00,,,,
+ois_fomc5,ois_m2m,2025-07-30,2025-09-17,usd_irs,,3.90,,,,
+ois_fomc6,ois_m2m,2025-09-17,2025-10-29,usd_irs,,3.80,,,,
+# --- LONG END: outright swaps and composites ---
+# node_tenor: optional override for which curve node this instrument calibrates.
+# Required when the auto-derived node date would collide with another instrument.
+# Rule for Spread: ref1 = anchor leg (already in curve), ref2 = new leg being introduced.
+#   If ref2 is ALSO an outright swap target, set node_tenor to ref1 explicitly.
+# Rule for Fly: ref2 (belly) is always the new node; node_tenor not needed.
+irs_2y,irs,spot,2y,usd_irs,,4.50,,,,
+fly_3y,fly,spot,,usd_irs,,5,2y,3y,5y,
+irs_5y,irs,spot,5y,usd_irs,,4.20,,,,
+fly_7y,fly,spot,,usd_irs,,3,5y,7y,10y,
+irs_10y,irs,spot,10y,usd_irs,,4.00,,,,
+sw_15y,spread,spot,,usd_irs,,20,10y,15y,,
+sw_20y,spread,spot,,usd_irs,,25,20y,30y,,20y
+irs_30y,irs,spot,30y,usd_irs,,4.10,,,,
